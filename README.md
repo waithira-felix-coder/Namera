@@ -1,144 +1,108 @@
 # Namera
 
-Namera is a full-stack baby-naming platform designed to help families discover names with cultural context, meaning, style, sound, and fit. The product combines a modern marketing front end with a data-powered backend so names are not just displayed, but explored with richer details and filtering.
+Namera is a modern baby-name discovery platform designed to help families choose a name with more clarity, cultural context, and confidence. The product blends a polished marketing experience with a data-backed search flow that surfaces meaning, origin, style, and fit.
 
-## What this project contains
+## Overview
 
-The repository is split into two main app layers:
+The project is organized into the main product layers and a documentation folder for the roadmap and screens:
 
-- apps/web
-  - Next.js 16 front end
-  - landing pages, search experience, comparison flows, collections, and navigation
-  - UI built with React, TypeScript, and Tailwind
-
-- apps/api
-  - FastAPI backend service
-  - SQLAlchemy data model for names
-  - endpoints for list/search retrieval and record details
-  - access to the larger dataset stored in PostgreSQL
-
-Additional project folders:
-
-- docs/
-  - product brief and project notes
-- infrastructure/
-  - deployment and infrastructure setup
-- packages/
-  - reusable code or future shared packages
-- scripts/
-  - database import and enrichment tooling
-
-## How the project works
-
-1. The frontend loads the name experience from the web app.
-2. The API provides name records from the database.
-3. The database contains a large seeded dataset of names, not just the six sample names used in static fallback content.
-4. Search, filtering, and detail pages use the API response and present enrichments such as:
-   - gender
-   - origin
-   - meaning
-   - style
-   - vibe
-   - pronunciation
-   - tags
-   - popularity
-   - compatibility hints
-
-## Skills gained while building this project
-
-This project covers a broad range of practical software-development skills:
-
-- Full-stack product architecture
-- Next.js app routing and responsive UI building
-- FastAPI backend design and API route creation
-- PostgreSQL + SQLAlchemy model design
-- Database seeding and import workflows
-- Data enrichment pipelines for a large catalog
-- Search/filter UX and client-side data handling
-- Debugging live API and frontend integration issues
-- Environment configuration and local app startup
-- Deployment-minded project structure and documentation
-
-## Local access to the 50K names
-
-The 50,000 names are not stored in the front-end fallback file. They live in the database behind the API.
-
-The local app may only show 6 names when the frontend is using its fallback dataset instead of the live API. That fallback file is in:
-
-- apps/web/lib/data/names.ts
-
-This local fallback is only a sample dataset for development and demo purposes. It is not the full database.
-
-To access the full catalog locally:
-
-1. Start the backend API:
-
-```bash
-cd apps/api
-# activate the project venv if you are using one
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```text
+Namera/
+├─ apps/
+│  ├─ api/          # FastAPI backend and name data access
+│  └─ web/          # Next.js frontend and product UI
+├─ docs/
+│  ├─ NAMERA_PROJECT_BRIEF.md
+│  └─ screenshots/  # UI screenshots for demo and review
+├─ .gitignore
+├─ alembic.ini
+├─ package.json
+├─ README.md
+└─ .git/
 ```
 
-2. Start the frontend app:
+## Product experience
 
-```bash
-cd apps/web
-npm install
-npm run dev
-```
+The frontend is built around a naming journey that helps parents:
 
-3. Make sure the frontend is pointed at the live API:
+- search names by meaning, style, origin, or religion
+- compare names side by side
+- browse curated collections and featured results
+- explore surname compatibility and fit signals
+- review detailed name profiles and saved favorites
+- move through a simple, modern discovery flow
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_USE_LIVE_API=true
-```
+## Feature highlights
 
-4. Open the app and visit the search route:
-
-- http://localhost:3000/search
-
-If the API is running correctly, the app will fetch from the backend and load the larger dataset instead of the six fallback records.
-
-## Database access pattern
-
-The live API endpoint is:
-
-- http://localhost:8000/api/v1/names
-
-This returns the list of names from the database.
-
-You can verify the full dataset by checking the API directly in a browser or via curl:
-
-```bash
-curl http://localhost:8000/api/v1/names | python -c "import sys, json; data=json.load(sys.stdin); print(len(data)); print(data[0])"
-```
-
-If the count is around 50,000, you are connected to the real database-backed catalog. If you still see just six records, the app is likely falling back to the sample file and the live API is not running or not enabled.
-
-## Navigation and flow
-
-The app includes a sticky top navigation bar across the main pages so users can move easily around the product.
-
-There is also a Back button in the navbar that returns to the previous page using browser history.
-
-## Run locally
-
-```bash
-# Terminal 1: API
-cd apps/api
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-
-# Terminal 2: Web app
-cd apps/web
-npm install
-npm run dev
-```
-
-Then open:
-
-- http://localhost:3000
+- Search-first experience for family-friendly name discovery
+- AI-style recommendation framing for fit, popularity, and meaning
+- Comparison pages for evaluating multiple name options
+- Collection-based browsing for organized discovery
+- Detailed name profiles with cultural and contextual information
+- Favorites and shortlist workflow for ongoing decisions
+- Responsive, product-ready UI built with Next.js and Tailwind
 
 ## Project brief
 
-The product direction is documented in [docs/NAMERA_PROJECT_BRIEF.md](docs/NAMERA_PROJECT_BRIEF.md).
+The product strategy and long-term direction are documented in [docs/NAMERA_PROJECT_BRIEF.md](docs/NAMERA_PROJECT_BRIEF.md). This file guides the product vision, user goals, and feature roadmap.
+
+## App screenshots
+
+### 1. Home page
+
+![Namera homepage](docs/screenshots/namera-home.png)
+
+### 2. Search page
+
+![Namera search page](docs/screenshots/namera-search.png)
+
+### 3. Compare page
+
+![Namera compare page](docs/screenshots/namera-compare.png)
+
+### 4. Advisor page
+
+![Namera advisor page](docs/screenshots/namera-advisor.png)
+
+### 5. Collections page
+
+![Namera collections page](docs/screenshots/namera-collections.png)
+
+### 6. Collection detail page
+
+![Namera collection detail page](docs/screenshots/namera-collection-detail.png)
+
+### 7. Favorites page
+
+![Namera favorites page](docs/screenshots/namera-favorites.png)
+
+### 8. Name profile page
+
+![Namera name profile page](docs/screenshots/namera-name-profile.png)
+
+## Run locally
+
+### Frontend
+
+```bash
+cd apps/web
+npm install
+npm run dev
+```
+
+Open http://localhost:3000
+
+### Backend
+
+```bash
+cd apps/api
+python -m venv .venv
+source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+## Notes
+
+- The project brief remains in the repository to guide product decisions and future feature development.
+- Screenshots are included for quick product demos and easier review.
