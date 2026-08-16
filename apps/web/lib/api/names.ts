@@ -2,7 +2,7 @@ import { names as fallbackNames } from "@/lib/data/names";
 import type { NameRecord } from "@/lib/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-const USE_LIVE_API = process.env.NEXT_PUBLIC_USE_LIVE_API === "true";
+const USE_LIVE_API = process.env.NEXT_PUBLIC_USE_LIVE_API !== "false";
 
 function normalizeTags(value: unknown): string[] {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
@@ -40,14 +40,13 @@ function mapApiName(raw: Record<string, unknown>): NameRecord {
 }
 
 async function fetchNames(): Promise<NameRecord[]> {
-  if (!USE_LIVE_API || typeof window === "undefined") {
+  if (!USE_LIVE_API) {
     return fallbackNames;
   }
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/names`, {
       cache: "no-store",
-      next: { revalidate: 0 },
     });
 
     if (!response.ok) {
@@ -57,7 +56,10 @@ async function fetchNames(): Promise<NameRecord[]> {
     const data = (await response.json()) as Record<string, unknown>[];
     return data.map(mapApiName);
   } catch (error) {
-    console.warn("Using fallback names because the API was unavailable:", error);
+    console.warn(
+      "Using fallback names because the API was unavailable:",
+      error,
+    );
     return fallbackNames;
   }
 }
