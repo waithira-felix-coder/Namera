@@ -70,7 +70,7 @@ The product strategy and long-term direction are documented in [docs/NAMERA_PROJ
 
 ### 6. Collection detail page
 
-![Namera collection detail page](docs/screenshots/namera-collection-detail.png)
+
 
 ### 7. Favorites page
 
